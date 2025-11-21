@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Header from './components/Header';
 import VideoBackground from './components/VideoBackground';
 import VideoSwitcher from './components/VideoSwitcher';
+import OrderButton from './components/OrderButton';
 
 const videos = [
   {
@@ -73,9 +74,7 @@ export default function Home() {
                 <span className='font-bold'>{language === 'ua' ? 'ПРИВАТНІСТЬ ' : 'PRIVACY '}</span>
                 {language === 'ua' ? 'У КОЖНІЙ ДЕТАЛІ' : 'IN EVERY DETAIL'}
               </p>
-              <button className="bg-[#EEAF7C] hover:bg-[#F19E5B] text-black px-8 py-8 rounded-3xl transition-colors text-[20px] font-medium uppercase mt-8 max-sm:text-[14px] max-sm:px-4 max-sm:w-60">
-                {language === 'ua' ? 'ЗАМОВИТИ ТРАНСФЕР' : 'ORDER TRANSFER'}
-              </button>
+              <OrderButton language={language} variant="desktop" />
             </div>
 
             <div className="hidden lg:flex justify-end">

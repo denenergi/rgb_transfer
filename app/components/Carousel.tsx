@@ -60,7 +60,7 @@ export default function Carousel({ slides, options = {} }: CarouselProps) {
       </div>
 
       <button
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 shadow-lg transition-all hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 shadow-lg transition-all hover:bg-white cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         onClick={scrollPrev}
         disabled={prevBtnDisabled}
         aria-label="Previous slide"
@@ -69,7 +69,7 @@ export default function Carousel({ slides, options = {} }: CarouselProps) {
       </button>
 
       <button
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 shadow-lg transition-all hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 shadow-lg transition-all hover:bg-white cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         onClick={scrollNext}
         disabled={nextBtnDisabled}
         aria-label="Next slide"

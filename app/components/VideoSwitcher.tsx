@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import NavigationButtons from './NavigationButtons';
+import VideoCard from './VideoCard';
 
 type VideoItem = {
   id: string;
@@ -43,7 +45,6 @@ export default function VideoSwitcher({
   }, [currentVideoId, videos]);
 
   const handleVideoClick = (clickedVideoId: string) => {
-    
     if (clickedVideoId === currentVideoId) {
       console.log('Same video, returning');
       return;
@@ -55,8 +56,6 @@ export default function VideoSwitcher({
       return;
     }
 
-    const clickedVideo = videos[clickedIndex];
-
     const newOrder = [
       videos[clickedIndex],
       ...videos.slice(0, clickedIndex),
@@ -67,40 +66,21 @@ export default function VideoSwitcher({
     onVideoChange(clickedVideoId);
   };
 
+  const handlePrevious = () => {
+    const currentIndex = videos.findIndex((v) => v.id === currentVideoId);
+    const prevIndex = currentIndex > 0 ? currentIndex - 1 : videos.length - 1;
+    handleVideoClick(videos[prevIndex].id);
+  };
+
+  const handleNext = () => {
+    const currentIndex = videos.findIndex((v) => v.id === currentVideoId);
+    const nextIndex = currentIndex < videos.length - 1 ? currentIndex + 1 : 0;
+    handleVideoClick(videos[nextIndex].id);
+  };
+
   return (
     <div className="flex flex-col items-end gap-4">
-      <div className="hidden md:flex items-center gap-2 relative z-20">
-        <button
-          onClick={() => {
-            const currentIndex = videos.findIndex((v) => v.id === currentVideoId);
-            const prevIndex = currentIndex > 0 ? currentIndex - 1 : videos.length - 1;
-            handleVideoClick(videos[prevIndex].id);
-          }}
-          className="w-12 h-12 flex items-center justify-center rounded-2xl transition-colors backdrop-blur-sm border-2 border-white/20"
-          aria-label="Previous video"
-        >
-          <img 
-            src="/arrow.svg" 
-            alt="Previous" 
-            className="w-3 h-3 scale-x-[-1]"
-          />
-        </button>
-        <button
-          onClick={() => {
-            const currentIndex = videos.findIndex((v) => v.id === currentVideoId);
-            const nextIndex = currentIndex < videos.length - 1 ? currentIndex + 1 : 0;
-            handleVideoClick(videos[nextIndex].id);
-          }}
-          className="w-12 h-12 flex items-center justify-center rounded-2xl transition-colors backdrop-blur-sm border-2 border-white/20"
-          aria-label="Next video"
-        >
-          <img 
-            src="/arrow.svg" 
-            alt="Previous" 
-            className="w-3 h-3 scale-x-[-1] rotate-180"
-          />
-        </button>
-      </div>
+      <NavigationButtons onPrevious={handlePrevious} onNext={handleNext} />
 
       <div className="relative flex items-start justify-start" style={{ height: '200px', width: '300px' }}>
         {orderedVideos.map((video, index) => {
@@ -111,13 +91,13 @@ export default function VideoSwitcher({
           const scale = isActive ? 1 : 1 - (index * 0.11);
           
           return (
-            <button
+            <VideoCard
               key={video.id}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleVideoClick(video.id);
-              }}
-              className="absolute transition-all duration-300 ease-in-out cursor-pointer"
+              videoSrc={video.videoSrc}
+              text={video.text}
+              isActive={isActive}
+              language={language}
+              onClick={() => handleVideoClick(video.id)}
               style={{
                 left: `${translateX}px`,
                 top: `${translateY}px`,
@@ -125,45 +105,7 @@ export default function VideoSwitcher({
                 transform: `scale(${scale})`,
                 pointerEvents: 'auto',
               }}
-            >
-              <div className={`bg-white/10 backdrop-blur-md rounded-xl p-4 w-[280px] transition-all`}>
-                <div className="relative mb-3">
-                  <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
-                    <video
-                      src={video.videoSrc}
-                      className="w-full h-full object-cover"
-                      muted
-                      preload="metadata"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-16 h-16 bg-black/60 backdrop-blur-sm rounded-full flex items-center justify-center">
-                        <svg
-                          width="28"
-                          height="28"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="text-white ml-1"
-                        >
-                          <path
-                            d="M8 5V19L19 12L8 5Z"
-                            fill="currentColor"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {isActive && video.text && (
-                  <p 
-                    key={`${video.id}-${language}`}
-                    className="text-white text-sm font-medium text-left uppercase fade-in"
-                  >
-                    {language === 'ua' ? video.text.ua : video.text.eng}
-                  </p>
-                )}
-              </div>
-            </button>
+            />
           );
         })}
       </div>
